@@ -1,0 +1,28 @@
+Prova/Teste Front-end
+Avisos antes de iniciar
+● Crie um repositório GitHub sem citar o nome da Intelbras
+● Realize os commits no repositório GitHub
+● Envie o repositório em questão junto ao e-mail de conclusão do desafio
+● Dúvidas sobre o desafio podem ser perguntadas aos recrutadores
+
+Objetivo
+Criar um web app simples de cadastro no formato stepper (Wizard) utilizando React.JS
+Requisitos
+1. A aplicação deve conter um menu lateral com dois itens (&#39;Novo Cliente&#39; e &#39; Lista de Clientes&#39;)
+2. A opção &#39;Novo Cliente&#39; deve iniciar o formulário no passo 1
+3. Passo 1 deve conter os campos: Nome, Sobrenome, E-mail, Telefone
+4. Passo 2 deve conter os campos: CEP, Endereço 1, Endereço 2
+5. Passo 3 deve conter os campos: Data de Nascimento, CPF, Renda Mensal
+6. Passo 4 deve conter uma mensagem de cadastro concluído com sucesso
+7. A opção &#39;Lista de Clientes&#39; deve listar todos os clientes cadastrados
+8. Ainda na opção &#39;Lista de Clientes&#39; deve ser possível clicar em um cliente e visualizar os dados
+do mesmo
+9. Não esqueça de colocar os botões de &#39;Voltar&#39; em cada Step do formulário
+10. Capriche na UX e lembre-se que seu teste pode ser testado em um dispositivo móvel,
+portanto preocupe-se com a responsividade
+Entrega do desafio
+- Entregar as instruções para rodar projeto, ou colocar no readme.md do repositório GIT
+- Publicar o projeto no GitHub Pages, Netlify, Heroku ou qualquer outra ferramenta de
+hospedagem e enviar a URL de publicação
+- Atente-se a cumprir a maioria dos requisitos e durante a avaliação vamos falar a respeito de
+todo o projeto.
