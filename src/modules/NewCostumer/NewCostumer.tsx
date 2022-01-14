@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Breadcrumb,
   Button,
@@ -7,31 +8,23 @@ import {
   Form,
   Input,
   InputNumber,
-  message,
   Result,
   Row,
-  Space,
   Steps,
 } from "antd";
 import { StepsStyled } from "./style";
 import { Container } from "../../components";
+import { PlusOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { useCostumer } from "../../context/Costumer";
 
 const NewCostumer: React.FC = () => {
   const [current, setCurrent] = useState<number>(0);
-  const steps = [
-    {
-      key: 0,
-    },
-    {
-      key: 1,
-    },
-    {
-      key: 2,
-    },
-    {
-      key: 3,
-    },
-  ];
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [formData, setFormData] = useState<any>();
+  const { addCostumer } = useCostumer();
+
+  const steps = [0, 1, 2, 3];
 
   const handleFormChange = useCallback(
     (key: number) => {
@@ -39,73 +32,119 @@ const NewCostumer: React.FC = () => {
         case 0:
           return (
             <>
-              <Form.Item
-                name={["user", "name"]}
-                label="Nome"
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item name={["user", "lastname"]} label="Sobrenome">
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={["user", "email"]}
-                label="Email"
-                rules={[{ type: "email" }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={["user", "phone"]}
-                label="Telefone"
-                rules={[{ type: "number", min: 0, max: 99 }]}
-              >
-                <InputNumber />
-              </Form.Item>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item
+                    name="name"
+                    label="Nome"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item name="lastname" label="Sobrenome">
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item
+                    name="email"
+                    label="Email"
+                    rules={[{ type: "email", required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="phone"
+                    label="Telefone"
+                    rules={[{ required: true }]}
+                  >
+                    <InputNumber
+                      style={{ minWidth: "150px" }}
+                      controls={false}
+                      placeholder="(xx) xxxxx-xxxx"
+                      formatter={(value) =>
+                        `${value}`.replace(
+                          /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/,
+                          "($1) $2-$3"
+                        )
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
             </>
           );
           break;
         case 1:
           return (
             <>
-              <Form.Item name={["user", "cep"]} label="CEP">
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={["user", "address"]}
-                label="Endereço 1"
-                tooltip="Endereço principal!"
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={["user", "addressAlternate"]}
-                label="Endereço 2"
-                tooltip="Endereço alternativo!"
-              >
-                <Input />
-              </Form.Item>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item name="cep" label="CEP">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="address"
+                    label="Endereço 1"
+                    tooltip="Endereço principal!"
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item
+                    name="addressAlternate"
+                    label="Endereço 2"
+                    tooltip="Endereço alternativo!"
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
             </>
           );
           break;
         case 2:
           return (
             <>
-              <Form.Item name={["user", "cpf"]} label="CPF">
-                <Input />
-              </Form.Item>
-              <Row>
+              <Row gutter={24}>
+                <Col span={6}>
+                  <Form.Item name="cpf" label="CPF">
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      controls={false}
+                      // formatter={(value) =>
+                      //   `${value}`.replace(
+                      //     /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/,
+                      //     "$1.$2.$3-$4"
+                      //   )
+                      // }
+                    />
+                  </Form.Item>
+                </Col>
                 <Col>
-                  <Form.Item name={["user", "cep"]} label="Data de Nasc.">
+                  <Form.Item name="birthday" label="Data de Nasc.">
                     <DatePicker
                       format="DD/MM/YYYY"
                       placeholder="ex.: 21/05/1993"
                     />
                   </Form.Item>
                 </Col>
+              </Row>
+              <Row>
                 <Col>
-                  <Form.Item name={["user", "salary"]} label="Renda Mensal">
+                  <Form.Item name="salary" label="Renda Mensal">
                     <InputNumber />
                   </Form.Item>
                 </Col>
@@ -117,13 +156,26 @@ const NewCostumer: React.FC = () => {
           return (
             <Result
               status="success"
-              title="Successfully Purchased Cloud Server ECS!"
-              subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+              title="Novo Cliente Cadastrado!"
               extra={[
-                <Button type="primary" key="console">
-                  Go Console
+                <Button
+                  type="primary"
+                  key="console"
+                  icon={<UnorderedListOutlined />}
+                  onClick={() => navigate("/list")}
+                >
+                  Lista
                 </Button>,
-                <Button key="buy">Buy Again</Button>,
+                <Button
+                  key="buy"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    form.resetFields();
+                    setCurrent(0);
+                  }}
+                >
+                  Novo
+                </Button>,
               ]}
             />
           );
@@ -135,15 +187,11 @@ const NewCostumer: React.FC = () => {
     [current]
   );
 
-  const onChange = (current: number) => {
-    setCurrent(current);
-  };
-
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
-    required: "${label} is required!",
+    required: "${label} é obrigatório!",
     types: {
-      email: "${label} is not a valid email!",
+      email: "${label} inválido!",
       number: "${label} is not a valid number!",
     },
     number: {
@@ -153,7 +201,40 @@ const NewCostumer: React.FC = () => {
   /* eslint-enable no-template-curly-in-string */
 
   const onFinish = (values: any) => {
-    console.log(values);
+    addCostumer({ ...formData, ...values });
+    setCurrent(3);
+  };
+
+  const handleIsValidFormByStep = (): boolean => {
+    switch (current) {
+      case 0:
+        return form.isFieldValidating(["name", "email", "phone"]);
+        break;
+
+      default:
+        return false;
+        break;
+    }
+  };
+
+  const onMoveStep = (type: string) => {
+    setFormData({ ...formData, ...form.getFieldsValue() });
+    // if (!handleIsValidFormByStep()) {
+    //   message.warning({
+    //     content: "Você deve completar os campos obrigatorios!",
+    //   });
+    //   return;
+    // }
+    switch (type) {
+      case "next":
+        setCurrent(current + 1);
+        break;
+      case "prev":
+        setCurrent(current - 1);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -163,13 +244,15 @@ const NewCostumer: React.FC = () => {
         <Breadcrumb.Item>Novo</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StepsStyled current={current} onChange={onChange}>
+      <StepsStyled current={current}>
         {steps.map((item) => (
-          <Steps.Step key={item.key} />
+          <Steps.Step key={item} />
         ))}
       </StepsStyled>
       <Container>
         <Form
+          form={form}
+          validateTrigger="onBlur"
           name="creation"
           onFinish={onFinish}
           validateMessages={validateMessages}
@@ -180,29 +263,26 @@ const NewCostumer: React.FC = () => {
       </Container>
 
       {current !== 3 && (
-        <div className="steps-action">
-          {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => console.log("next")}>
-              Next
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              onClick={() => message.success("Processing complete!")}
-            >
-              Done
-            </Button>
-          )}
+        <Row justify="end">
           {current > 0 && (
             <Button
               style={{ margin: "0 8px" }}
-              onClick={() => console.log("prev")}
+              onClick={() => onMoveStep("prev")}
             >
-              Previous
+              Anterior
             </Button>
           )}
-        </div>
+          {current < steps.length - 1 && current !== steps.length - 2 && (
+            <Button type="primary" onClick={() => onMoveStep("next")}>
+              Próximo
+            </Button>
+          )}
+          {current === steps.length - 2 && (
+            <Button type="primary" onClick={() => form.submit()}>
+              Criar
+            </Button>
+          )}
+        </Row>
       )}
     </Container>
   );
