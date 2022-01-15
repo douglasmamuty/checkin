@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, List, Popconfirm, Typography } from "antd";
 
-import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
+import { PaperClipOutlined, CloseOutlined } from "@ant-design/icons";
 import { IListItem } from "./interface";
 
 const ListItem: React.FC<IListItem> = ({
@@ -21,14 +21,13 @@ const ListItem: React.FC<IListItem> = ({
         description={item.email}
       />
       <Button
+        title="Mais Informações!"
         type="link"
-        icon={<PlusOutlined />}
+        icon={<PaperClipOutlined />}
         onClick={() => {
           handleActionMoreInfo(item);
         }}
-      >
-        Informações
-      </Button>
+      />
       <Popconfirm
         title="Você tem certeza？"
         okText="Sim"
