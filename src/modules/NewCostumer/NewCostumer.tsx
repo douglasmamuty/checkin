@@ -16,24 +16,35 @@ import { StepsStyled } from "./style";
 import { Container } from "../../components";
 import { PlusOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useCostumer } from "../../context/Costumer";
+import MaskedInput from "antd-mask-input";
+import { useMediaQuery } from "react-responsive";
 
 const NewCostumer: React.FC = () => {
   const [current, setCurrent] = useState<number>(0);
+  const isMobile = useMediaQuery({ maxWidth: 600 });
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<any>();
   const { addCostumer } = useCostumer();
 
   const steps = [0, 1, 2, 3];
+  const validateMessages = {
+    required: "${label} é obrigatório!",
+  };
 
   const handleFormChange = useCallback(
     (key: number) => {
       switch (key) {
         case 0:
           return (
-            <>
+            <Form
+              form={form}
+              name="step-1"
+              validateMessages={validateMessages}
+              layout="vertical"
+            >
               <Row gutter={24}>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item
                     name="name"
                     label="Nome"
@@ -43,14 +54,14 @@ const NewCostumer: React.FC = () => {
                   </Form.Item>
                 </Col>
 
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item name="lastname" label="Sobrenome">
                     <Input />
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={24}>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item
                     name="email"
                     label="Email"
@@ -59,39 +70,44 @@ const NewCostumer: React.FC = () => {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item
                     name="phone"
                     label="Telefone"
                     rules={[{ required: true }]}
                   >
-                    <InputNumber
-                      style={{ minWidth: "150px" }}
-                      controls={false}
+                    <MaskedInput
+                      mask="(11) 11111-1111"
                       placeholder="(xx) xxxxx-xxxx"
-                      formatter={(value) =>
-                        `${value}`.replace(
-                          /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/,
-                          "($1) $2-$3"
-                        )
-                      }
-                    />
+                    ></MaskedInput>
                   </Form.Item>
                 </Col>
               </Row>
-            </>
+            </Form>
           );
-          break;
+
         case 1:
           return (
-            <>
+            <Form
+              form={form}
+              name="step-2"
+              validateMessages={validateMessages}
+              layout="vertical"
+            >
               <Row gutter={24}>
-                <Col span={12}>
-                  <Form.Item name="cep" label="CEP">
-                    <Input />
+                <Col xs={24} sm={24} md={12}>
+                  <Form.Item
+                    name="cep"
+                    label="CEP"
+                    rules={[{ required: true }]}
+                  >
+                    <MaskedInput
+                      mask="11111-111"
+                      placeholder="xxxxx-xxx"
+                    ></MaskedInput>
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item
                     name="address"
                     label="Endereço 1"
@@ -102,7 +118,7 @@ const NewCostumer: React.FC = () => {
                 </Col>
               </Row>
               <Row gutter={24}>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12}>
                   <Form.Item
                     name="addressAlternate"
                     label="Endereço 2"
@@ -112,28 +128,31 @@ const NewCostumer: React.FC = () => {
                   </Form.Item>
                 </Col>
               </Row>
-            </>
+            </Form>
           );
-          break;
+
         case 2:
           return (
-            <>
+            <Form
+              form={form}
+              name="step-3"
+              validateMessages={validateMessages}
+              layout="vertical"
+            >
               <Row gutter={24}>
-                <Col span={6}>
-                  <Form.Item name="cpf" label="CPF">
-                    <InputNumber
-                      style={{ width: "100%" }}
-                      controls={false}
-                      // formatter={(value) =>
-                      //   `${value}`.replace(
-                      //     /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/,
-                      //     "$1.$2.$3-$4"
-                      //   )
-                      // }
-                    />
+                <Col xs={24} sm={24} md={6}>
+                  <Form.Item
+                    name="cpf"
+                    label="CPF"
+                    rules={[{ required: true }]}
+                  >
+                    <MaskedInput
+                      mask="111.111.111-11"
+                      placeholder="xxx.xxx.xxx-xx"
+                    ></MaskedInput>
                   </Form.Item>
                 </Col>
-                <Col>
+                <Col xs={24} sm={24} md={6}>
                   <Form.Item name="birthday" label="Data de Nasc.">
                     <DatePicker
                       format="DD/MM/YYYY"
@@ -142,16 +161,21 @@ const NewCostumer: React.FC = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row>
-                <Col>
+              <Row gutter={24}>
+                <Col xs={24} sm={24} md={6}>
                   <Form.Item name="salary" label="Renda Mensal">
-                    <InputNumber />
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      step="0000000000000.00"
+                      stringMode
+                      controls={false}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
-            </>
+            </Form>
           );
-          break;
+
         case 3:
           return (
             <Result
@@ -174,7 +198,7 @@ const NewCostumer: React.FC = () => {
                     setCurrent(0);
                   }}
                 >
-                  Novo
+                  Cliente
                 </Button>,
               ]}
             />
@@ -187,44 +211,27 @@ const NewCostumer: React.FC = () => {
     [current]
   );
 
-  /* eslint-disable no-template-curly-in-string */
-  const validateMessages = {
-    required: "${label} é obrigatório!",
-    types: {
-      email: "${label} inválido!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
-  /* eslint-enable no-template-curly-in-string */
-
-  const onFinish = (values: any) => {
-    addCostumer({ ...formData, ...values });
-    setCurrent(3);
-  };
-
-  const handleIsValidFormByStep = (): boolean => {
-    switch (current) {
-      case 0:
-        return form.isFieldValidating(["name", "email", "phone"]);
+  const onFormFinish = (name, { values, forms }) => {
+    switch (name) {
+      case "step-1":
+        setFormData({ ...formData, ...form.getFieldsValue() });
+        onMoveStep("next");
+        break;
+      case "step-2":
+        setFormData({ ...formData, ...form.getFieldsValue() });
+        onMoveStep("next");
+        break;
+      case "step-3":
+        addCostumer({ ...formData, ...values });
+        setCurrent(3);
         break;
 
       default:
-        return false;
         break;
     }
   };
 
   const onMoveStep = (type: string) => {
-    setFormData({ ...formData, ...form.getFieldsValue() });
-    // if (!handleIsValidFormByStep()) {
-    //   message.warning({
-    //     content: "Você deve completar os campos obrigatorios!",
-    //   });
-    //   return;
-    // }
     switch (type) {
       case "next":
         setCurrent(current + 1);
@@ -244,46 +251,44 @@ const NewCostumer: React.FC = () => {
         <Breadcrumb.Item>Novo</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StepsStyled current={current}>
-        {steps.map((item) => (
-          <Steps.Step key={item} />
-        ))}
-      </StepsStyled>
-      <Container>
-        <Form
-          form={form}
-          validateTrigger="onBlur"
-          name="creation"
-          onFinish={onFinish}
-          validateMessages={validateMessages}
-          layout="vertical"
+      <Container direction={isMobile ? "horizontal" : "vertical"} padding="0">
+        <StepsStyled
+          current={current}
+          direction={isMobile ? "vertical" : undefined}
         >
-          {handleFormChange(current)}
-        </Form>
-      </Container>
+          {steps.map((item) => (
+            <Steps.Step key={item} />
+          ))}
+        </StepsStyled>
 
-      {current !== 3 && (
-        <Row justify="end">
-          {current > 0 && (
-            <Button
-              style={{ margin: "0 8px" }}
-              onClick={() => onMoveStep("prev")}
-            >
-              Anterior
-            </Button>
+        <Container direction="vertical" padding="0">
+          <Form.Provider onFormFinish={onFormFinish}>
+            {handleFormChange(current)}
+          </Form.Provider>
+          {current !== 3 && (
+            <Row justify="end">
+              {current > 0 && (
+                <Button
+                  style={{ margin: "0 8px" }}
+                  onClick={() => onMoveStep("prev")}
+                >
+                  Anterior
+                </Button>
+              )}
+              {current < steps.length - 1 && current !== steps.length - 2 && (
+                <Button type="primary" onClick={() => form.submit()}>
+                  Próximo
+                </Button>
+              )}
+              {current === steps.length - 2 && (
+                <Button type="primary" onClick={() => form.submit()}>
+                  Criar
+                </Button>
+              )}
+            </Row>
           )}
-          {current < steps.length - 1 && current !== steps.length - 2 && (
-            <Button type="primary" onClick={() => onMoveStep("next")}>
-              Próximo
-            </Button>
-          )}
-          {current === steps.length - 2 && (
-            <Button type="primary" onClick={() => form.submit()}>
-              Criar
-            </Button>
-          )}
-        </Row>
-      )}
+        </Container>
+      </Container>
     </Container>
   );
 };
