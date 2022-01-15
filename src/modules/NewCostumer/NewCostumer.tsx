@@ -32,6 +32,18 @@ const NewCostumer: React.FC = () => {
     required: "${label} é obrigatório!",
   };
 
+  const handleCheckLength = (value: string, qtd: number): Promise<any> => {
+    const len = value.replaceAll("_", "").length;
+
+    if (len !== qtd) {
+      // eslint-disable-next-line consistent-return
+      return Promise.reject(new Error("${label} incorreto!"));
+    }
+
+    // eslint-disable-next-line consistent-return
+    return Promise.resolve();
+  };
+
   const handleFormChange = useCallback(
     (key: number) => {
       switch (key) {
@@ -74,7 +86,14 @@ const NewCostumer: React.FC = () => {
                   <Form.Item
                     name="phone"
                     label="Telefone"
-                    rules={[{ required: true }]}
+                    rules={[
+                      { required: true },
+                      () => ({
+                        validator(_, value) {
+                          return handleCheckLength(value, 15);
+                        },
+                      }),
+                    ]}
                   >
                     <MaskedInput
                       mask="(11) 11111-1111"
@@ -99,7 +118,14 @@ const NewCostumer: React.FC = () => {
                   <Form.Item
                     name="cep"
                     label="CEP"
-                    rules={[{ required: true }]}
+                    rules={[
+                      { required: true },
+                      () => ({
+                        validator(_, value) {
+                          return handleCheckLength(value, 9);
+                        },
+                      }),
+                    ]}
                   >
                     <MaskedInput
                       mask="11111-111"
@@ -144,7 +170,14 @@ const NewCostumer: React.FC = () => {
                   <Form.Item
                     name="cpf"
                     label="CPF"
-                    rules={[{ required: true }]}
+                    rules={[
+                      { required: true },
+                      () => ({
+                        validator(_, value) {
+                          return handleCheckLength(value, 14);
+                        },
+                      }),
+                    ]}
                   >
                     <MaskedInput
                       mask="111.111.111-11"
@@ -165,9 +198,10 @@ const NewCostumer: React.FC = () => {
                 <Col xs={24} sm={24} md={6}>
                   <Form.Item name="salary" label="Renda Mensal">
                     <InputNumber
+                      addonBefore="R$"
+                      decimalSeparator=","
+                      step="0.00"
                       style={{ width: "100%" }}
-                      step="0000000000000.00"
-                      stringMode
                       controls={false}
                     />
                   </Form.Item>

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, List, Popconfirm, Typography } from "antd";
-
 import { PaperClipOutlined, CloseOutlined } from "@ant-design/icons";
 import { IListItem } from "./interface";
 
@@ -10,11 +9,9 @@ const ListItem: React.FC<IListItem> = ({
   handleActionRemove,
   ...res
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <List.Item {...res}>
       <List.Item.Meta
-        // avatar={<Avatar  />}
         title={
           <Typography.Text>{`${item.name} ${item.lastname}`}</Typography.Text>
         }
