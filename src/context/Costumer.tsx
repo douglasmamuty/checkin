@@ -9,8 +9,9 @@ const handleSaveStorage = (costumer) => {
 
 // eslint-disable-next-line react/prop-types
 export const CostumerProvider = ({ children }) => {
+  const costumerTemp = localStorage.getItem("costumer");
   const [costumer, setCostumer] = useState<ICostumer[]>(
-    JSON.parse(localStorage.getItem("costumer") || "")
+    costumerTemp ? JSON.parse(costumerTemp) : []
   );
 
   const removeCostumer = useCallback(

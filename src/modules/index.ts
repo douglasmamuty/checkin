@@ -1,5 +1,5 @@
 import ListCostumer from "./ListCostumer";
 import NewCostumer from "./NewCostumer";
-import Dashboard from "./Dashboard";
+import Checkin from "./Checkin";
 
-export const modules: any[] = [ListCostumer, NewCostumer, Dashboard];
+export const modules: any[] = [ListCostumer, NewCostumer, Checkin];

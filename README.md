@@ -23,3 +23,5 @@ cd checkin
 yarn install
 yarn start
 ```
+
+## ❤️ [Live Demo](https://douglasmamuty.github.io/checkin/)

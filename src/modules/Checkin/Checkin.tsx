@@ -6,7 +6,7 @@ import { Button, Result } from "antd";
 
 import { Container } from "../../components";
 
-const Dashboard: React.FC = () => {
+const Checkin: React.FC = () => {
   const navigate = useNavigate();
   return (
     <Container direction="vertical">
@@ -30,4 +30,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default Checkin;
