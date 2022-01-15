@@ -179,6 +179,7 @@ const NewCostumer: React.FC = () => {
         case 3:
           return (
             <Result
+              style={isMobile ? { padding: "0px" } : undefined}
               status="success"
               title="Novo Cliente Cadastrado!"
               extra={[
@@ -251,44 +252,47 @@ const NewCostumer: React.FC = () => {
         <Breadcrumb.Item>Novo</Breadcrumb.Item>
       </Breadcrumb>
 
-      <Container direction={isMobile ? "horizontal" : "vertical"} padding="0">
-        <StepsStyled
-          current={current}
-          direction={isMobile ? "vertical" : undefined}
-        >
-          {steps.map((item) => (
-            <Steps.Step key={item} />
-          ))}
-        </StepsStyled>
-
-        <Container direction="vertical" padding="0">
-          <Form.Provider onFormFinish={onFormFinish}>
-            {handleFormChange(current)}
-          </Form.Provider>
-          {current !== 3 && (
-            <Row justify="end">
-              {current > 0 && (
-                <Button
-                  style={{ margin: "0 8px" }}
-                  onClick={() => onMoveStep("prev")}
-                >
-                  Anterior
-                </Button>
-              )}
-              {current < steps.length - 1 && current !== steps.length - 2 && (
-                <Button type="primary" onClick={() => form.submit()}>
-                  Próximo
-                </Button>
-              )}
-              {current === steps.length - 2 && (
-                <Button type="primary" onClick={() => form.submit()}>
-                  Criar
-                </Button>
-              )}
-            </Row>
-          )}
-        </Container>
-      </Container>
+      <Row gutter={[10, 24]}>
+        <Col span={isMobile ? 4 : 24}>
+          <StepsStyled
+            current={current}
+            direction={isMobile ? "vertical" : undefined}
+          >
+            {steps.map((item) => (
+              <Steps.Step key={item} />
+            ))}
+          </StepsStyled>
+        </Col>
+        <Col span={isMobile ? 20 : 24}>
+          <Container direction="vertical" padding="0">
+            <Form.Provider onFormFinish={onFormFinish}>
+              {handleFormChange(current)}
+            </Form.Provider>
+            {current !== 3 && (
+              <Row justify="end">
+                {current > 0 && (
+                  <Button
+                    style={{ margin: "0 8px" }}
+                    onClick={() => onMoveStep("prev")}
+                  >
+                    Anterior
+                  </Button>
+                )}
+                {current < steps.length - 1 && current !== steps.length - 2 && (
+                  <Button type="primary" onClick={() => form.submit()}>
+                    Próximo
+                  </Button>
+                )}
+                {current === steps.length - 2 && (
+                  <Button type="primary" onClick={() => form.submit()}>
+                    Criar
+                  </Button>
+                )}
+              </Row>
+            )}
+          </Container>
+        </Col>
+      </Row>
     </Container>
   );
 };
